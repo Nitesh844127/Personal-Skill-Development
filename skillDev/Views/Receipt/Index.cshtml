@@ -1,0 +1,192 @@
+﻿@model IEnumerable<skillDev.Models.Receipt>
+
+@{
+    ViewData["Title"] = "Index";
+    string url = Context.Request.Path + Context.Request.HttpContext.Request.QueryString;
+}
+<!-- Include SweetAlert library (CDN link) -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="row text-center">
+    <h1 style="text-align:center">Receipts List</h1>
+</div>
+
+<div class="row">
+
+    <form method="post">
+        <div class="col-4" style="float:left;padding:5px">
+            <label>Filter StudentByName</label>
+            <select name="stName" class="form-control">
+                <option value="">----Select Student----</option>
+                @foreach (var student in ViewBag.StudentNames)
+                {
+
+                    <option value="@student.stName">@student.stName</option>
+                }
+            </select>
+
+        </div>
+        <div class="col-4" style="float:left;padding:5px">
+            <label>Filter StudentByCourse</label>
+            <select name="courseId" class="form-control">
+
+                <option>----Select Course---</option>
+                @foreach (var obj in ViewBag.cs)
+                {
+                    if (@obj.id == @ViewBag.courseId)
+                    {
+                        <option selected value="@obj.id">
+                            @obj.courseName
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@obj.id">
+                            @obj.courseName
+                        </option>
+                    }
+
+                }
+            </select>
+
+        </div>
+
+        <div class="col-4" style="float:left;padding:5px">
+            <label>Filter StudentByClass</label>
+            <select name="classId" class="form-control">
+
+                <option>---Select Class---</option>
+                @foreach (var obj in ViewBag.cl)
+                {
+                    if (@obj.id == @ViewBag.classId)
+                    {
+                        <option selected value="@obj.id">
+                            @obj.className
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@obj.id">
+                            @obj.className
+                        </option>
+                    }
+
+                }
+            </select>
+
+        </div>
+        <div class="col-2 mt-2" style="float:left;padding:25px">
+            <a href="~/Receipt/Create?url=@url" class="btn btn-primary form-control">Create New</a>
+        </div>
+        <div class="col-2 mt-2" style="float:left;padding:25px">
+            <a href="~/Receipt/PdfExport?classId=@ViewBag.classId&stName=@ViewBag.stName&courseId=@ViewBag.courseId" class="btn btn-danger form-control">Pdf</a>
+        </div>
+        <div class="col-3 mt-2" style="float:left;padding:25px">
+            <input type="submit" value="Filter List" class="btn btn-primary form-control" />
+        </div>
+    </form>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Student Name
+            </th>
+            <th>
+                Date
+            </th>
+
+            <th>
+                Student Class
+            </th>
+            <th>
+                Student Course
+            </th>
+            <th>
+                Mobile No
+            </th>
+            <th>
+                Amount
+            </th>
+            <th>
+                Remark
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.studName)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.date.ToDate().ToString("yyyy-MM-dd"))*@
+                    @item.date.ToDate().ToString("yyyy-MM-dd")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.className)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.courseName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.mob)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.remark)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.id, url = url  }, new { @class = "btn btn-warning" })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.id, url = url }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+
+        }
+        <tr>
+            <td colspan="4"></td>
+            <td>Total Amount</td>
+            <td>@ViewBag.total</td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+
+    @if (TempData.ContainsKey("ReceiptCreated") && (bool)TempData["ReceiptCreated"])
+    {
+        <text>
+            Swal.fire({
+                icon: 'success',
+                title: 'Receipt  Created!',
+                text: 'Your Receipt has been successfully Created.',
+            });
+        </text>
+    }
+    @if (TempData.ContainsKey("ReceiptDeleted") && (bool)TempData["ReceiptDeleted"])
+    {
+        <text>
+            Swal.fire({
+                icon: 'success',
+                title: 'Receipt  Deleted!',
+                text: 'Your Receipt has been  successfully Deleted.',
+            });
+        </text>
+    }
+    @if (TempData.ContainsKey("ReceiptUpdated") && (bool)TempData["ReceiptUpdated"])
+    {
+        <text>
+            Swal.fire({
+                icon: 'success',
+                title: 'Receipt  Updated!',
+                text: 'Your Receipt has been  successfully Updated .',
+            });
+        </text>
+    }
+</script>

@@ -1,0 +1,159 @@
+﻿@model IEnumerable<skillDev.Models.Receipt>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form method="post">
+    @*<div class="col-4 mt-4" style="float:left ;padding:5px">
+            <label>Filter studentByName</label>
+            <input type="text" name="stName" value="@ViewBag.stName" />
+
+        </div>*@
+    <div class="col-lg-6" style="float:left; margin:6px">
+        <div class="form-group">
+            <label class="control-label">Student Name</label>
+            <select name="studId" class="form-control">
+                <option value=""> Student Name</option>
+                @foreach (var name in ViewBag.StudentNames)
+                {
+                    <option value="@name.id">@name.stName</option>
+                }
+            </select>
+            @*<label class="control-label">Student Name</label>
+
+            <select name="studId" class="form-control" id="studId">
+                <option value="">Select Student</option>
+                @foreach (var name in ViewBag.stName)
+                {
+                    <option value="@name">@name</option>
+                }
+            </select>*@
+
+        </div>
+    </div>
+
+
+    <div class="col-4" style="float:left;padding:5px">
+        <label>Filter StudentByCourse</label>
+        <select name="courseId" class="form-control">
+
+            <option>----Select Course---</option>
+            @foreach (var obj in ViewBag.cs)
+            {
+                if (@obj.id == @ViewBag.courseId)
+                {
+                    <option selected value="@obj.id">
+                        @obj.courseName
+                    </option>
+                }
+                else
+                {
+                    <option value="@obj.id">
+                        @obj.courseName
+                    </option>
+                }
+
+            }
+        </select>
+
+    </div>
+
+    <div class="col-4" style="float:left;padding:5px">
+        <label>Filter StudentByClass</label>
+        <select name="classId" class="form-control">
+
+            <option>---Select Class---</option>
+            @foreach (var obj in ViewBag.cl)
+            {
+                if (@obj.id == @ViewBag.classId)
+                {
+                    <option selected value="@obj.id">
+                        @obj.className
+                    </option>
+                }
+                else
+                {
+                    <option value="@obj.id">
+                        @obj.className
+                    </option>
+                }
+
+            }
+        </select>
+
+    </div>
+    <div class="col-4 mt-4" style="float:left;padding:5px">
+        <input type="submit" value="Submit" class="btn btn-primary" style="color:white;background-color:blue" />
+    </div>
+</form>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+           
+            <th>
+               Date
+            </th>
+            <th>
+                Student Name
+            </th>
+            <th>
+                Student Class
+            </th>
+            <th>
+               Student Course
+            </th>
+            <th>
+               Mobile No
+            </th>
+            <th>
+                Amount
+            </th>
+            <th>
+                Remark
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.studName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.className)
+            </td>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.courseName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mob)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.remark)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+               @*  @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) | *@
+                @Html.ActionLink("Delete", "Delete", new {  id=item.id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
